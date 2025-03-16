@@ -1,1 +1,1 @@
-# Fast Api Example using SQL Model 
+# Fast Api basic HTTP operation using SQL Model ORM
