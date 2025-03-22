@@ -7,13 +7,13 @@ from typing import TypeVar, Generic, Optional
 T = TypeVar("T")
 
 class SuccessResponse(BaseModel, Generic[T]):
-    message: str
+    message: str | None=None
     status_code: int
     data: Optional[T] = None  # Data is optional (useful for 204 No Content)
 
 
 # Utility function for standardized responses
-def success_response(message: str,status_code: int = status.HTTP_200_OK, data: Optional[T] = None):
+def success_response(message: str=None,status_code: int = status.HTTP_200_OK, data: Optional[T] = None):
     """
     Standard method to return structured API responses.
 

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import defer
 
 from app.model.task import Task
-from app.schema.task import TaskCreate, TaskCreateResponse, TaskUpdate, TaskUpdateResponse
+from app.schema.task import TaskCreate, TaskCreateResponse, TaskUpdate, TaskUpdateResponse,TaskResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_db
 from uuid import UUID
@@ -13,7 +13,6 @@ router = APIRouter(
     prefix='/tasks',
     tags=['Tasks']
 )
-
 
 @router.post("", response_model=SuccessResponse[TaskCreateResponse])
 async def create_task(task: TaskCreate, session: AsyncSession = Depends(get_db)):
@@ -42,3 +41,13 @@ async def update_task(task_id: UUID, task: TaskUpdate,session: AsyncSession= Dep
             return success_response("Task updated successfully", data=task, status_code=status.HTTP_200_OK)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/{task_id}", response_model=SuccessResponse[TaskResponse])
+async def get_task(task_id:UUID, session: AsyncSession = Depends(get_db)):
+    try:
+        task= await TaskService.get_task_by_id(task_id=task_id,session=session)
+        if task:
+            return success_response(status_code=status.HTTP_200_OK,data= task)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+

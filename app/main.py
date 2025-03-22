@@ -1,13 +1,24 @@
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
-
 from app.db.database import sessionmanager
-from app.settings.config import DATABASE_URL,DEBUG
+from app.settings.config import DATABASE_URL, DEBUG
 from app.routers import tasks
 import uvicorn
 import os
-os.environ["PYTHONBREAKPOINT"] = "0"
+
+# os.environ["PYTHONBREAKPOINT"] = "0"
+
+# description = """
+# Task management API
+#
+# You will be able to:
+#
+# * **Create task**.
+# * **Update task**.
+# ** Delete task**.
+#
+# """
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,7 +28,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan, debug=True)
-app.include_router(tasks.router,prefix="/api")
+app.include_router(tasks.router, prefix="/api")
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8009, workers=1)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="127.0.0.1", port=8084, workers=1)
